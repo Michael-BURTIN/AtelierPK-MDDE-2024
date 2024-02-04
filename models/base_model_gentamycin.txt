@@ -1,0 +1,28 @@
+DESCRIPTION:
+The administration is via an infusion (requires INFUSION RATE or INFUSION DURATION column-type in the data set).
+The PK model has one compartment (volume V) and a linear elimination (clearance Cl).
+[COVARIATE]
+input = {weight, age}
+
+EQUATION:
+t_weight = log(weight/7.1)
+coeff_weight= 0.743
+t_age = log(age/20.7)
+coeff_age= 0.321
+
+[INDIVIDUAL]
+input={V_pop, omega_V, Cl_pop, omega_Cl, weight, t_weight, coeff_weight, t_age, coeff_age}
+
+DEFINITION:
+V = {distribution=lognormal, typical=V_pop, covariate=t_weight, coefficient = coeff_weight, sd=omega_V}
+Cl = {distribution=lognormal, typical=Cl_pop, covariate=t_age, coefficient = coeff_age, sd=omega_Cl}
+
+[LONGITUDINAL]
+input = {V, Cl}
+
+PK:
+; PK model definition
+Cc = pkmodel(V, Cl)
+
+OUTPUT:
+output = Cc

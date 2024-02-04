@@ -1,0 +1,176 @@
+---
+title: "Rapport MDDE - Michael BURTIN"
+output:
+  pdf_document: 
+    toc: true
+    number_sections: true
+  html_document: default
+date: "26-01-2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_knit$set(root.dir = 'D:/GitHub/Atelier-MDDE-2024/data')
+```
+
+```{r include=FALSE}
+library(dplyr)
+library(ggplot2)
+library(ggstatsplot)
+library(flextable)
+library(lixoftConnectors) 
+initializeLixoftConnectors(software = "simulx")
+```
+
+# Introduction
+
+Ce rapport à pour objectif de reproduire les résultats d'une étude PK et de pousser l'analyse plus loin en évaluant l'atteinte de la cible d'efficacité pour les différents schémas posologiques.
+
+Pour ce faire, il a été repris le modèle PKpop issue de la publication "Population Pharmacokinetics of Gentamicin in Mexicn Children With Severe Malnutrition" de "Lares-Asserff" et son équipe. Les simulations sont réalisés à l'aide du logiciel Simulix de Loxift.
+
+La publication est une étude PopPK sur la gentamycine, un antibiotique qui fait partie des recommandations de l'OMS dans le traitement d'infections liées à la malnutrition. Toutefois, au vu de l'état physiologique de ce type de patient, une attention particulière est nécessaire pour éviter toute surtoxicité ou bien une concentration sous-efficace.
+
+# Méthodes
+
+## I. Population
+
+La population étudié correspond à un total de 26 enfants, d'environ 20.7 mois, et souffrant donc de malnutrition sévère. La gentamycine a été administré en IV bolus sur 30 min, à 2.5 mg/kg toutes les 8 heures. Un prélèvement est effectué post-perfusion à : 0.5, 1, 2, 4, 6 et 8 heures. Cela porte à 96 prélèvements pour l'ensemble l'échantillon.
+
+## II. Modèle de Lares-Asserff
+
+Le modèle final découlant de l'article est un modèle mono-compartimental, d'ordre zéro. L'article ne le précisant pas, on supposera l'absence de lag-time. La variabilité inter-individuelle est décrit de manière exponentiel et les paramètres de population suivant une loi log-normal. Pour le modèle d'erreur résiduelle, il s'agit d'un modèle mixte de type additif et proportionnel.
+
+La clairance et le volume de distribution ont été retenu comme paramètres finaux du modèle. Pour les covariables, ce sont l'age et le poids suivant un modèle allométrique sur respectivement la Clairance et le Volume de distribution.
+
+Le résumé des valeurs de paramètres sont disponibles dans le tableau 1.
+
+```{r Creation table parametres, echo=FALSE, message=FALSE, warning=FALSE}
+noms_parametres = c("valeur typique V", "omega V", "teta V/poids","valeur typique Cl", "omega Cl", "teta Cl/age")
+valeurs_parametres = c(2.33,0.244,0.743,1.15,0.244,0.321)
+rse = c(5, 18, 22, 7, 14, 22)
+unites_parametres = c("L","L","","L/h","L/h", "")
+df_parametres = data.frame("Parametres"=noms_parametres, "Valeur"=valeurs_parametres, "RSE"=rse,"Unités"=unites_parametres)
+ft_parametres = flextable(df_parametres)
+ft_parametres
+```
+
+## III. Reproduction du modèle sur Simulix
+
+La première étape fut l'écriture du modèle. Ce dernier est disponible en format txt dans les fichiers fournies (dossier "models").
+
+Une fois le modèle charger sur Simulix, il convient de rentrer les paramètres de population du modèle (V = 2.23 L, et CL = 1.15 L/h), la distribution et les moyennes des covariables (log-normal, age 20.7 mois +/- 16, et poids : 7.1 kg +/- 2.4), et pour finir un premier schéma posologique de traitement : dose unique, à 10 mg/kg, et une perfusion sur 0.5 h. La cinétique est disponible est figure X, et le model dans "models/baseModel_10mg_kg_uniqueDose.slmx"
+
+# Résultats
+
+```{r importation des données, include=FALSE}
+parametres_ind = read.csv(file = "data/individualParameters.txt")
+```
+
+```{r prétraitement_parametres}
+# On peut renommer les variables si nécessaire
+parametres_ind = parametres_ind %>% mutate("group" = case_when(parametres_ind$group == "simulationGroup1" ~ "100mg",
+																					parametres_ind$group == "simulationGroup2"~ "10mgkg",
+																					TRUE ~ "error"))
+
+# on groupe les données par type de traitement
+parametres_ind = parametres_ind %>% dplyr::group_by(group)
+```
+
+## Description de la population virtuelle générée
+
+Les principales caractéristiques de la population sont rapportées dans la table X
+
+```{r tables et graphs paramètres covariables, echo=FALSE}
+# on peut utiliser différents packages
+parametres_ind %>% select(-id) %>%
+	dlookr::describe() %>% 
+	dplyr::select(c(described_variables, group, mean, sd)) %>%
+	flextable
+```
+
+La figure X décrit...
+
+```{r}
+ggbetweenstats(data=parametres_ind, x=group, y=age)
+```
+
+## Evaluation des stratégies thérapeutiques
+
+```{r chargement concentrations}
+concentrations_ind = read.csv("Simulation/simulation_Cc.txt")
+```
+
+```{r prétraitement_concentrations}
+# On peut renommer les variables si nécessaire
+concentrations_ind = concentrations_ind %>% mutate("group" = case_when(concentrations_ind$group == "simulationGroup1" ~ "100mg",
+																					concentrations_ind$group == "simulationGroup2"~ "10mgkg",
+																					TRUE ~ "error"))
+
+# on groupe les données par type de traitement
+concentrations_ind = concentrations_ind %>% dplyr::group_by(group, id)
+```
+
+### Atteinte de la cible d'efficacité
+
+La cible d'efficacité considérée est l'atteinte d'une concentration maximale supérieure ou égale à 8 mg/l (cible basse), 16 mg/l (cible intermédiaire) et 32 mg/l (cible haute). Seule la Cmax du 5ème jour a été considérée pour cette analyse.
+
+```{r calcul Cmax et Cmin, include=FALSE}
+
+conc_J5 = concentrations_ind %>% filter(time>76)
+target = conc_J5 %>% summarise(conc_max=max(Cc), conc_min = min(Cc))
+```
+
+Les distributions des valeurs de Cmax et Cmin selon les groupes sont présentées dans les figures XX et XX respectivement.
+
+```{r}
+# figure décrivant la Cmax selon les groupes
+ggbetweenstats(data=target, x=group, y=conc_max)
+```
+
+```{r}
+# figure décrivant la Cmin selon les groupes
+ggbetweenstats(data=target, x=group, y=conc_min)
+```
+
+## Calcul de l'atteinte de la cible
+
+Pourcentage de patients atteignant la cible selon le schéma posologique
+
+```{r Analyse de l'atteinte de la cible}
+cible_basse = target %>% filter(conc_max>8 & conc_min<0.5)
+cible_basse_100mg = cible_basse %>% filter(group=="100mg") %>%
+	nrow()
+cible_basse_10mgkg = cible_basse %>% filter(group=="10mgkg") %>%
+	nrow()
+
+cible_moyenne = target %>% filter(conc_max>16 & conc_min<0.5)
+cible_moyenne_100mg = cible_moyenne %>% filter(group=="100mg") %>%
+	nrow()
+cible_moyenne_10mgkg = cible_moyenne %>% filter(group=="10mgkg") %>%
+	nrow()
+
+cible_haute = target %>% filter(conc_max>32 & conc_min<0.5)
+cible_haute_100mg = cible_haute %>% filter(group=="100mg") %>%
+	nrow()
+cible_haute_10mgkg = cible_haute %>% filter(group=="10mgkg") %>%
+	nrow()
+```
+
+```{r Table des résultats}
+
+atteinte_cible_basse = c(cible_basse_100mg, cible_basse_10mgkg)
+atteinte_cible_moyenne = c(cible_moyenne_100mg, cible_moyenne_10mgkg)
+atteinte_cible_haute = c(cible_haute_100mg, cible_haute_10mgkg)
+
+traitements = c("100 mg, dose unique", "10 mg/kg par jour")
+
+resultats_cible = data.frame(traitements, atteinte_cible_basse, atteinte_cible_moyenne, atteinte_cible_haute) %>%
+	rename("Traitement" = traitements,
+			 "Pourcentage d'atteinte de la cible basse" = atteinte_cible_basse,
+			 "Pourcentage d'atteinte de la cible moyenne" = atteinte_cible_moyenne,
+			 "Pourcentage d'atteinte de la cible haute" = atteinte_cible_haute,) %>%
+	flextable
+
+resultats_cible
+
+```
