@@ -58,19 +58,17 @@ ft_parametres
 
 La première étape fut l'écriture du modèle. Ce dernier est disponible en format txt dans les fichiers fournies (dossier "models").
 
-Une fois le modèle charger sur Simulix, il convient de rentrer les paramètres de population du modèle (V = 2.23 L, et CL = 1.15 L/h), la distribution et les moyennes des covariables (log-normal, age 20.7 mois +/- 16, et poids : 7.1 kg +/- 2.4), et pour finir un premier schéma posologique de traitement : dose unique, à 10 mg/kg, et une perfusion sur 0.5 h. La cinétique est disponible est figure X, et le model dans "models/baseModel_10mg_kg_uniqueDose.slmx"
+Une fois le modèle charger sur Simulix, il convient de rentrer les paramètres de population du modèle (V = 2.23 L, et CL = 1.15 L/h), la distribution et les moyennes des covariables (log-normal, age 20.7 mois +/- 16, et poids : 7.1 kg +/- 2.4), et pour finir un premier schéma posologique de traitement : dose unique, à 10 mg/kg, et une perfusion sur 0.5 h. Le model est disponible dans "models/baseModel_10mg_kg_uniqueDose.slmx".
 
 # Résultats
 
 ```{r importation des données, include=FALSE}
-parametres_ind = read.csv(file = "data/individualParameters.txt")
+parametres_ind = read.csv(file = "models/baseModel_10mg_kg_uniqueDose/Simulation/individualParameters.txt")
 ```
 
 ```{r prétraitement_parametres}
 # On peut renommer les variables si nécessaire
-parametres_ind = parametres_ind %>% mutate("group" = case_when(parametres_ind$group == "simulationGroup1" ~ "100mg",
-																					parametres_ind$group == "simulationGroup2"~ "10mgkg",
-																					TRUE ~ "error"))
+parametres_ind = parametres_ind %>% mutate("group" = case_when(parametres_ind$group == "simulationGroup1" ~ "100mg", parametres_ind$group == "simulationGroup2"~ "10mgkg", TRUE ~ "error"))
 
 # on groupe les données par type de traitement
 parametres_ind = parametres_ind %>% dplyr::group_by(group)

@@ -30,6 +30,7 @@ continuousCovariates={weight, age}
 
 TREATMENT:
 '10mg_kg_per_24h' = {{{times={0}, amounts={10}, durations={0.5}}}, adm=1}
+'trtRegular1' = {{{start=0, interval=24, nbDoses=1, amount=100}}, adm=1}
 
 [SIMULATION]
 GROUPS:
