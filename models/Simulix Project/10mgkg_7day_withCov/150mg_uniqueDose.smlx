@@ -33,8 +33,8 @@ TREATMENT:
 
 [SIMULATION]
 GROUPS:
-'simulationGroup1'={size=1, parameter='PopParameters', remaining={}, covariate='laresModel_Covariate', outputs={'oneDay_Output_Cc'}, treatment={'10mgkg_uniqueDose'}}
-'simulationGroup2'={size=1, parameter='PopParameters', remaining={}, covariate='laresModel_Covariate', outputs={'oneDay_Output_Cc'}, treatment={'150mg_uniqueDose_withoutWeightScaling'}}
+'simulationGroup1'={size=1000, parameter='PopParameters', remaining={}, covariate='laresModel_Covariate', outputs={'oneDay_Output_Cc'}, treatment={'10mgkg_uniqueDose'}}
+'simulationGroup2'={size=1000, parameter='PopParameters', remaining={}, covariate='laresModel_Covariate', outputs={'oneDay_Output_Cc'}, treatment={'150mg_uniqueDose_withoutWeightScaling'}}
 
 [EXPLORATION]
 GROUPS:

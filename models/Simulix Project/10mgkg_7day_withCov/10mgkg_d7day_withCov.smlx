@@ -30,7 +30,7 @@ TREATMENT:
 
 [SIMULATION]
 GROUPS:
-'simulationGroup1'={size=1, parameter='PopParameters', remaining={}, covariate='laresModel_Covariate', outputs={'7day_Output_Cc'}, treatment={'10mgkg_7day_treatment'}}
+'simulationGroup1'={size=1000, parameter='PopParameters', remaining={}, covariate='laresModel_Covariate', outputs={'7day_Output_Cc'}, treatment={'10mgkg_7day_treatment'}}
 
 [EXPLORATION]
 GROUPS:
