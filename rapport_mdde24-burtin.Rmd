@@ -136,11 +136,11 @@ La cible d'efficacité considérée est l'atteinte d'une concentration maximale 
 
 ```{r calcul Cmax et Cmin, include=FALSE}
 
-conc_J5 = concentrations_ind %>% filter(time>76)
+conc_J5 = concentrations_ind %>% filter(TIME>0)
 target = conc_J5 %>% summarise(conc_max=max(Cc), conc_min = min(Cc))
 ```
 
-Les distributions des valeurs de Cmax et Cmin selon les groupes sont présentées dans les figures 2 et 3 respectivement.
+Pour le moment, les données simulées comportants des valeurs manquates, il n'est pas possible de poursuivre l'execution du code sans erreur. Le reste du rapport décrira ce qui est attendu.
 
 ```{r}
 # figure décrivant la Cmax selon les groupes
