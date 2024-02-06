@@ -1,0 +1,42 @@
+
+<MODEL>
+file = '../../base_model_gentamycin.txt'
+
+<SIMULX>
+
+[SETTINGS]
+GLOBAL:
+exportpath='10mgkg_d7day_withCov'
+
+[DEFINITION]
+POPULATION:
+parameters={V_pop, omega_V, Cl_pop, omega_Cl}
+'PopParameters' = {{{values={2.33, 0.244, 1.15, 0.349}}}}
+
+OUTPUT:
+'7day_Output_Cc' = {output=Cc, {{start=0, interval=1, final=168}}}
+
+INDIVIDUAL:
+parameters={V, Cl}
+'IndivParameters' = {{{values={2.33, 1.15}}}}
+
+COVARIATE:
+continuousCovariates={weight, age}
+'Covariates' = {{{values={1, 1}}}}
+'laresModel_Covariate' = {{distribution=normal, typical=7.1, sd=2.4}, {distribution=normal, typical=20.7, sd=16}}
+
+TREATMENT:
+'10mgkg_7day_treatment' = {{{start=0, interval=24, nbDoses=7, amount=10, duration=0.5}}, adm=1, scale={duration, covariate=weight, intercept=0}}
+
+[SIMULATION]
+GROUPS:
+'simulationGroup1'={size=1, parameter='PopParameters', remaining={}, covariate='laresModel_Covariate', outputs={'7day_Output_Cc'}, treatment={'10mgkg_7day_treatment'}}
+
+[EXPLORATION]
+GROUPS:
+'explorationGroup1'={remaining={}, parameter='IndivParameters', outputs={'7day_Output_Cc'}}
+
+[TASKS]
+simulation()
+endpoint(run=false)
+
