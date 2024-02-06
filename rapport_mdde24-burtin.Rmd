@@ -56,9 +56,25 @@ ft_parametres
 
 ## III. Reproduction du modèle sur Simulix
 
-La première étape fut l'écriture du modèle. Ce dernier est disponible en format txt dans les fichiers fournies (dossier "models").
+La première étape fut l'écriture du modèle. Ce dernier est disponible en format txt dans les fichiers fournies (dossier "models"). Une fois le modèle charger sur Simulix, il convient de rentrer en premier lieu les paramètres de population du modèle :
 
-Une fois le modèle charger sur Simulix, il convient de rentrer les paramètres de population du modèle (V = 2.23 L, et CL = 1.15 L/h), la distribution et les moyennes des covariables (log-normal, age 20.7 mois +/- 16, et poids : 7.1 kg +/- 2.4), et pour finir un premier schéma posologique de traitement : dose unique, à 10 mg/kg, et une perfusion sur 0.5 h. Le model est disponible dans "models/baseModel_10mg_kg_uniqueDose.slmx".
+-   V = 2.23 L
+
+-   CL = 1.15 L/h.
+
+Concernant les paramètres individuelles,
+
+Ensuite, on définit la distribution et les valeurs moyennes des covariables :
+
+-   Age : log-normal, 20.7 mois +/- 16
+
+-   Poids : log-normal, 7.1 kg +/- 2.4
+
+Pour finir, on réalise notre premier schéma posologique de traitement :
+
+-   dose unique, à 10 mg/kg, en perfusion continu sur 0.5 h.
+
+Le model est disponible dans "models/baseModel_10mg_kg_uniqueDose.slmx".
 
 # Résultats
 

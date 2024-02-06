@@ -1,2 +1,0 @@
-V_pop,omega_V,Cl_pop,omega_Cl,group
-1,1,1,1,simulationGroup1
