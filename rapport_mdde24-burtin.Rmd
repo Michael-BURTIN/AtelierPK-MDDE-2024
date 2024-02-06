@@ -78,11 +78,9 @@ Il s'en est suivi la définition des covariables avec leur distribution et valeu
 
 -   Poids : log-normal, valeur moyenne = 7.1 kg et d'écart type = 2.4
 
-Pour le premier traitement, il fut repris la dose retenue par l'article à savoir 10 mg/kg et par jour, avec une durée de perfusion de 30min. La dose croit selon le poids, et l'intercepte demandé sur Simulix est de 0. Au départ un modèle sur 7 jour a été réalisé, mais pour plus de simplicité sur le rapport (et comme il n'est pas fait mention de durée totale de traitement dans l'article), on se basera sur une dose unique.
+Pour le premier traitement, il fut repris la dose retenue par l'article à savoir 10 mg/kg et par jour, avec une durée de perfusion de 30min. La dose croit selon le poids, et l'intercepte demandé sur Simulix est de 0. Au départ un modèle sur 7 jour a été réalisé, mais pour plus de simplicité sur le rapport (et comme il n'est pas fait mention de durée totale de traitement dans l'article), on se basera sur une dose unique. Le model, dénommé "10mgkg_uniqueDose_withCov.slmx" est disponible dans "models/Simulix Project/".
 
-Le model, dénommé "10mgkg_uniqueDose_withCov.slmx" est disponible dans "models/Simulix Project/".
-
-La comparaison se faite avec un traitement unique pour tous à 150 mg, avec donc absence de scaling selon le poids. Toujours en dose unique, et avec un délai de perfusion de 30min.
+La comparaison se faite avec un traitement unique pour tous à 150 mg, avec donc absence de scaling selon le poids. Toujours en dose unique, et avec un délai de perfusion de 30min. Le model, dénommé "150mg_uniqueDose.slmx" est disponible dans "models/Simulix Project/".
 
 # Résultats
 
@@ -92,7 +90,7 @@ parametres_ind = read.csv(file = "models/Simulix Project/150mg_uniqueDose/Simula
 
 ```{r prétraitement_parametres}
 # On peut renommer les variables si nécessaire
-parametres_ind = parametres_ind %>% mutate("group" = case_when(parametres_ind$group == "simulationGroup1" ~ "10mg", parametres_ind$group == "simulationGroup2"~ "10mgkg", TRUE ~ "error"))
+parametres_ind = parametres_ind %>% mutate("group" = case_when(parametres_ind$group == "simulationGroup1" ~ "10mgkg", parametres_ind$group == "simulationGroup2"~ "150mg", TRUE ~ "error"))
 
 # on groupe les données par type de traitement
 parametres_ind = parametres_ind %>% dplyr::group_by(group)
@@ -119,17 +117,17 @@ ggbetweenstats(data=parametres_ind, x=group, y=age)
 ## Évaluation des stratégies thérapeutiques
 
 ```{r chargement concentrations}
-concentrations_ind = read.csv("Simulation/simulation_Cc.txt")
+concentrations_ind = read.csv("models/Simulix Project/150mg_uniqueDose/Simulation/simulatedData.csv")
 ```
 
 ```{r prétraitement_concentrations}
 # On peut renommer les variables si nécessaire
-concentrations_ind = concentrations_ind %>% mutate("group" = case_when(concentrations_ind$group == "simulationGroup1" ~ "100mg",
-																					concentrations_ind$group == "simulationGroup2"~ "10mgkg",
+concentrations_ind = concentrations_ind %>% mutate("group" = case_when(concentrations_ind$group == "simulationGroup1" ~ "10mgkg",
+																					concentrations_ind$group == "simulationGroup2"~ "150mg",
 																					TRUE ~ "error"))
 
 # on groupe les données par type de traitement
-concentrations_ind = concentrations_ind %>% dplyr::group_by(group, id)
+concentrations_ind = concentrations_ind %>% dplyr::group_by(group, ID)
 ```
 
 ### Atteinte de la cible d'efficacité
