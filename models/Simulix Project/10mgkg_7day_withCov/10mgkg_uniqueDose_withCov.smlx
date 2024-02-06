@@ -1,12 +1,12 @@
 
 <MODEL>
-file = '../../../../base_model_gentamycin.txt'
+file = '../../base_model_gentamycin.txt'
 
 <SIMULX>
 
 [SETTINGS]
 GLOBAL:
-exportpath='../'
+exportpath='10mgkg_uniqueDose_withCov'
 
 [DEFINITION]
 POPULATION:
