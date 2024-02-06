@@ -6,16 +6,16 @@ input = {weight, age}
 
 EQUATION:
 t_weight = log(weight/7.1)
-coeff_weight= 0.743
+coeff_weight = 0.743
 t_age = log(age/20.7)
-coeff_age= 0.321
+coeff_age = 0.321
 
 [INDIVIDUAL]
-input={V_pop, omega_V, Cl_pop, omega_Cl, weight, t_weight, coeff_weight, t_age, coeff_age}
+input = {V_pop, omega_V, Cl_pop, omega_Cl, weight, t_weight, coeff_weight, age, t_age, coeff_age}
 
 DEFINITION:
-V = {distribution=lognormal, typical=V_pop, covariate=t_weight, coefficient = coeff_weight, sd=omega_V}
-Cl = {distribution=lognormal, typical=Cl_pop, covariate=t_age, coefficient = coeff_age, sd=omega_Cl}
+V = {distribution = lognormal, typical = V_pop, covariate = t_weight, coefficient = coeff_weight, sd = omega_V}
+Cl = {distribution = lognormal, typical = Cl_pop, covariate = t_age, coefficient = coeff_age, sd = omega_Cl}
 
 [LONGITUDINAL]
 input = {V, Cl}
