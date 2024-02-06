@@ -87,7 +87,7 @@ La comparaison se faite avec un traitement unique pour tous à 150 mg, avec donc
 # Résultats
 
 ```{r importation des données, include=FALSE}
-parametres_ind = read.csv(file = "models/Simulix Project/10mgkg_7day_withCov/10mgkg_uniqueDose_withCov/Simulation/individualParameters.txt")
+parametres_ind = read.csv(file = "models/Simulix Project/150mg_uniqueDose/Simulation/individualParameters.txt")
 ```
 
 ```{r prétraitement_parametres}
@@ -110,7 +110,7 @@ parametres_ind %>% select(-id) %>%
 	flextable
 ```
 
-La figure X décrit la valeur moyenne pour chacune des distributions de paramètres simulés. Comme nous le voyons, la CL est de 1.52 L/h, le volume de distribution de 1.86 L, l'age de 21 mois, et le poids de 8.8 kg.
+La figure X décrit la valeur moyenne pour chacune des distributions de paramètres simulés. Comme nous le voyons, quelque soit le paramètre, les données sont assez similaires entre les deux les groupes.
 
 ```{r}
 ggbetweenstats(data=parametres_ind, x=group, y=age)
