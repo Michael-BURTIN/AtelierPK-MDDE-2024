@@ -42,49 +42,55 @@ Le modèle final découlant de l'article est un modèle mono-compartimental, d'o
 
 La clairance et le volume de distribution ont été retenu comme paramètres finaux du modèle. Pour les covariables, ce sont l'age et le poids suivant un modèle allométrique sur respectivement la Clairance et le Volume de distribution.
 
-Le résumé des valeurs de paramètres sont disponibles dans le tableau 1.
+Le résumé des valeurs de paramètres sont disponibles dans le tableau 1. Pour les covariables, les valeurs sont disponibles dans le tableau 2.
 
 ```{r Creation table parametres, echo=FALSE, message=FALSE, warning=FALSE}
-noms_parametres = c("valeur typique V", "omega V", "teta V/poids","valeur typique Cl", "omega Cl", "teta Cl/age")
-valeurs_parametres = c(2.33,0.244,0.743,1.15,0.244,0.321)
-rse = c(5, 18, 22, 7, 14, 22)
-unites_parametres = c("L","L","","L/h","L/h", "")
+noms_parametres = c("valeur typique - V", "omega - V","valeur typique - Cl", "omega - Cl")
+valeurs_parametres = c(2.33,0.244,1.15,0.349)
+rse = c(5, 18, 7, 14)
+unites_parametres = c("L","L","L/h","L/h")
 df_parametres = data.frame("Parametres"=noms_parametres, "Valeur"=valeurs_parametres, "RSE"=rse,"Unités"=unites_parametres)
+ft_parametres = flextable(df_parametres)
+ft_parametres
+```
+
+```{r Creation table des covariables, echo=FALSE, message=FALSE, warning=FALSE}
+noms_parametres = c("Age", "Poids")
+valeurs_parametres = c(20.7,7.1)
+sd = c(16, 2.4)
+unites_parametres = c("mois","kg")
+df_parametres = data.frame("Parametres"=noms_parametres, "Valeur"=valeurs_parametres, "Sd"=sd,"Unités"=unites_parametres)
 ft_parametres = flextable(df_parametres)
 ft_parametres
 ```
 
 ## III. Reproduction du modèle sur Simulix
 
-La première étape fut l'écriture du modèle. Ce dernier est disponible en format txt dans les fichiers fournies (dossier "models"). Une fois le modèle charger sur Simulix, il convient de rentrer en premier lieu les paramètres de population du modèle :
+La première étape fut l'écriture du modèle Simulix. Ce dernier est disponible en format txt dans les fichiers fournies (au sein du dossier "models"). Une fois le modèle chargé sur Simulix, les paramètres de population du modèle ont été rentré en premier lieu :
 
 -   V = 2.23 L
 
--   CL = 1.15 L/h.
+-   CL = 1.15 L/h
 
-Concernant les paramètres individuelles,
+Ensuite, il s'en est suivi la définition des covariable avec leur distribution et valeurs moyennes :
 
-Ensuite, on définit la distribution et les valeurs moyennes des covariables :
+-   Age : normal, 20.7 mois +/- 16
 
--   Age : log-normal, 20.7 mois +/- 16
+-   Poids : normal, 7.1 kg +/- 2.4
 
--   Poids : log-normal, 7.1 kg +/- 2.4
+Pour le premier traitement, il fut repris la dose retenue par l'article à savoir 10 mg/kg et par jour, avec une durée de perfusion de 30min. La dose croit selon le poids, et l'intercept est de 0. Au départ un modèle sur 7 jour a été réalisé, mais pour plus de simplicité sur le rapport (et comme il n'est pas fait mention de durée totale sur l'article), on se basera en dose unique.
 
-Pour finir, on réalise notre premier schéma posologique de traitement :
-
--   dose unique, à 10 mg/kg, en perfusion continu sur 0.5 h.
-
-Le model est disponible dans "models/baseModel_10mg_kg_uniqueDose.slmx".
+Le model, dénommé "10mgkg_uniqueDose_withCov.slmx" est disponible dans "models/Simulix Project/".
 
 # Résultats
 
 ```{r importation des données, include=FALSE}
-parametres_ind = read.csv(file = "models/baseModel_10mg_kg_uniqueDose/Simulation/individualParameters.txt")
+parametres_ind = read.csv(file = "models/Simulix Project/10mgkg_7day_withCov/10mgkg_uniqueDose_withCov/Simulation/individualParameters.txt")
 ```
 
 ```{r prétraitement_parametres}
 # On peut renommer les variables si nécessaire
-parametres_ind = parametres_ind %>% mutate("group" = case_when(parametres_ind$group == "simulationGroup1" ~ "100mg", parametres_ind$group == "simulationGroup2"~ "10mgkg", TRUE ~ "error"))
+parametres_ind = parametres_ind %>% mutate("group" = case_when(parametres_ind$group == "simulationGroup1" ~ "10mg", parametres_ind$group == "simulationGroup2"~ "10mgkg", TRUE ~ "error"))
 
 # on groupe les données par type de traitement
 parametres_ind = parametres_ind %>% dplyr::group_by(group)
@@ -102,7 +108,7 @@ parametres_ind %>% select(-id) %>%
 	flextable
 ```
 
-La figure X décrit...
+La figure X décrit la valeur moyenne pour chacune des distributions de paramètres simulés. Comme nous le voyons, la CL est de 1.52 L/h, le volume de distribution de 1.86 L, l'age de 21 mois, et le poids de 8.8 kg.
 
 ```{r}
 ggbetweenstats(data=parametres_ind, x=group, y=age)
