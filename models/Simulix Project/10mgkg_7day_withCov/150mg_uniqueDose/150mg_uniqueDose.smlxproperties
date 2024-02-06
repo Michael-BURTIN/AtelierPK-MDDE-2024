@@ -1,0 +1,40 @@
+[CHARTS]
+outputplot%3ACc%3A0\color=true
+outputplot%3ACc%3A0\filter=true
+outputplot%3ACc%3A0\mergeableSplits=false
+outputplot%3ACc%3A0\split=true
+outputplot%3ACc%3A0\splitAliases=0
+outputplot%3ACc%3A0\splitOrder=0
+predictiondistribution%3ACc%3A0\color=true
+predictiondistribution%3ACc%3A0\filter=true
+predictiondistribution%3ACc%3A0\mergeableSplits=true
+predictiondistribution%3ACc%3A0\split=true
+predictiondistribution%3ACc%3A0\splitAliases=0
+predictiondistribution%3ACc%3A0\splitOrder=0
+
+[PROPERTIES]
+outputplot%3ACc%3A0\hasDoses=true
+outputplot%3ACc%3A0\hasReplicates=false
+outputplot%3ACc%3A0\replicateSelection=@Invalid()
+outputplot%3ACc%3A0\xLabel=time
+outputplot%3ACc%3A0\yLabel=Cc
+predictiondistribution%3ACc%3A0\hasDoses=true
+predictiondistribution%3ACc%3A0\hasReplicates=false
+predictiondistribution%3ACc%3A0\xLabel=time
+predictiondistribution%3ACc%3A0\yInterval=0, 30.579981917026
+predictiondistribution%3ACc%3A0\yLabel=Cc
+
+[STRATIFY]
+outputplot%3ACc%3A0\split=__GROUP__
+outputplot%3ACc%3A0\splitOrder=#__GROUP__:simulationGroup1, #__GROUP__:simulationGroup2
+outputplot%3ACc%3A0\splitAliases=@Variant(\0\0\0\b\0\0\0\x2\0\0\0\x36\0#\0_\0_\0G\0R\0O\0U\0P\0_\0_\0:\0s\0i\0m\0u\0l\0\x61\0t\0i\0o\0n\0G\0r\0o\0u\0p\0\x32\0\0\0\n\0\0\0 \0s\0i\0m\0u\0l\0\x61\0t\0i\0o\0n\0G\0r\0o\0u\0p\0\x32\0\0\0\x36\0#\0_\0_\0G\0R\0O\0U\0P\0_\0_\0:\0s\0i\0m\0u\0l\0\x61\0t\0i\0o\0n\0G\0r\0o\0u\0p\0\x31\0\0\0\n\0\0\0 \0s\0i\0m\0u\0l\0\x61\0t\0i\0o\0n\0G\0r\0o\0u\0p\0\x31)
+outputplot%3ACc%3A0\mergedSplits=false
+predictiondistribution%3ACc%3A0\split=__GROUP__
+predictiondistribution%3ACc%3A0\splitOrder=#__GROUP__:simulationGroup1, #__GROUP__:simulationGroup2
+predictiondistribution%3ACc%3A0\splitAliases=@Variant(\0\0\0\b\0\0\0\x2\0\0\0\x36\0#\0_\0_\0G\0R\0O\0U\0P\0_\0_\0:\0s\0i\0m\0u\0l\0\x61\0t\0i\0o\0n\0G\0r\0o\0u\0p\0\x32\0\0\0\n\0\0\0 \0s\0i\0m\0u\0l\0\x61\0t\0i\0o\0n\0G\0r\0o\0u\0p\0\x32\0\0\0\x36\0#\0_\0_\0G\0R\0O\0U\0P\0_\0_\0:\0s\0i\0m\0u\0l\0\x61\0t\0i\0o\0n\0G\0r\0o\0u\0p\0\x31\0\0\0\n\0\0\0 \0s\0i\0m\0u\0l\0\x61\0t\0i\0o\0n\0G\0r\0o\0u\0p\0\x31)
+predictiondistribution%3ACc%3A0\mergedSplits=false
+
+[COVARIATES]
+continuous=@Variant(\0\0\0\b\0\0\0\x2\0\0\0\f\0w\0\x65\0i\0g\0h\0t\0\0\0\t\0\0\0\x2\0\0\0\t\0\0\0\x2\0\0\0\x6@!\xa6\xd4\xc1\0\x37L\0\0\0\x6@\"C\x8d\xdd\xca-V\0\0\0\t\0\0\0\x2\0\0\0\x6@\"C\x8d\xdd\xca-V\0\0\0\x6@\"\xe0\x46\xfa\x94#_\0\0\0\x6\0\x61\0g\0\x65\0\0\0\t\0\0\0\x2\0\0\0\t\0\0\0\x2\0\0\0\x6@5EXc\xae\"\xf6\0\0\0\x6@<\x9b\x6{(\xc3\xe4\0\0\0\t\0\0\0\x2\0\0\0\x6@<\x9b\x6{(\xc3\xe4\0\0\0\x6@A\xf8ZIQ\xb2i)
+discrete=@Variant(\0\0\0\b\0\0\0\x1\0\0\0\x12\0_\0_\0G\0R\0O\0U\0P\0_\0_\0\0\0\t\0\0\0\x2\0\0\0\t\0\0\0\x1\0\0\0\n\0\0\0 \0s\0i\0m\0u\0l\0\x61\0t\0i\0o\0n\0G\0r\0o\0u\0p\0\x31\0\0\0\t\0\0\0\x1\0\0\0\n\0\0\0 \0s\0i\0m\0u\0l\0\x61\0t\0i\0o\0n\0G\0r\0o\0u\0p\0\x32)
+colors=@Variant(\0\0\0\b\0\0\0\x4\0\0\0\f\0w\0\x65\0i\0g\0h\0t\0\0\0\t\0\0\0\x2\0\0\0\n\0\0\0\xe\0#\0\x42\0\x32\0\x39\0\x31\0\x32\0\x46\0\0\0\n\0\0\0\xe\0#\0\x42\0\x32\0\x37\0\x36\0\x42\0\x32\0\0\0\x6\0\x61\0g\0\x65\0\0\0\t\0\0\0\x2\0\0\0\n\0\0\0\xe\0#\0\x36\0\x30\0\x42\0\x44\0\x36\0\x38\0\0\0\n\0\0\0\xe\0#\0\x46\0\x31\0\x37\0\x43\0\x42\0\x30\0\0\0\f\0_\0_\0i\0\x64\0_\0_\0\0\0\t\0\0\0\x2\0\0\0\n\0\0\0\xe\0#\0\x33\0\x39\0\x33\0\x62\0\x37\0\x39\0\0\0\n\0\0\0\xe\0#\0\x33\0\x39\0\x33\0\x62\0\x37\0\x39\0\0\0\x12\0_\0_\0G\0R\0O\0U\0P\0_\0_\0\0\0\t\0\0\0\x2\0\0\0\n\0\0\0\xe\0#\0\x34\0\x36\0\x38\0\x32\0\x42\0\x34\0\0\0\n\0\0\0\xe\0#\0\x34\0\x44\0\x34\0\x44\0\x34\0\x44)

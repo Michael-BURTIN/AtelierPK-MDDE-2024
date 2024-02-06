@@ -1,0 +1,3 @@
+id,time,amt,tinf,admtype,washout,group
+1,0,88.2584193351399,4.41292,1,0,simulationGroup1
+2,0,150,0.5,1,0,simulationGroup2
