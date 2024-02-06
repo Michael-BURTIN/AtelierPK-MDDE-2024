@@ -24,11 +24,11 @@ initializeLixoftConnectors(software = "simulx")
 
 # Introduction
 
-Ce rapport à pour objectif de reproduire les résultats d'une étude PK et de pousser l'analyse plus loin en évaluant l'atteinte de la cible d'efficacité pour les différents schémas posologiques.
+Ce rapport à pour objectif de reproduire les résultats d'une étude PK et d'en pousser l'analyse plus loin en évaluant l'atteinte de la cible d'efficacité sur différents schémas posologiques que ceux proposés par l'article étudié.
 
-Pour ce faire, il a été repris le modèle PKpop issue de la publication "Population Pharmacokinetics of Gentamicin in Mexicn Children With Severe Malnutrition" de "Lares-Asserff" et son équipe. Les simulations sont réalisés à l'aide du logiciel Simulix de Loxift.
+Pour ce faire, il a été repris le modèle PopPK issu de la publication "Population Pharmacokinetics of Gentamicin in Mexican Children With Severe Malnutrition" de "Lares-Asserff" et son équipe. Les simulations sont réalisés à l'aide du logiciel Simulix de la société Loxift.
 
-La publication est une étude PopPK sur la gentamycine, un antibiotique qui fait partie des recommandations de l'OMS dans le traitement d'infections liées à la malnutrition. Toutefois, au vu de l'état physiologique de ce type de patient, une attention particulière est nécessaire pour éviter toute surtoxicité ou bien une concentration sous-efficace.
+La publication est une étude sur la gentamycine, un antibiotique qui fait partie des recommandations de l'OMS dans le traitement d'infections liées à la malnutrition. Toutefois, au vu de l'état physiologique de ce type de patient, une attention particulière est nécessaire pour éviter toute surtoxicité ou bien une concentration sous-efficace.
 
 # Méthodes
 
@@ -38,13 +38,13 @@ La population étudié correspond à un total de 26 enfants, d'environ 20.7 mois
 
 ## II. Modèle de Lares-Asserff
 
-Le modèle final découlant de l'article est un modèle mono-compartimental, d'ordre zéro. L'article ne le précisant pas, on supposera l'absence de lag-time. La variabilité inter-individuelle est décrit de manière exponentiel et les paramètres de population suivant une loi log-normal. Pour le modèle d'erreur résiduelle, il s'agit d'un modèle mixte de type additif et proportionnel.
+Le modèle final découlant de l'article est un modèle mono-compartimental, dont l'élimination est d'ordre zéro. L'article ne le précisant pas, on supposera l'absence de lag-time. La variabilité inter-individuelle est décrit de manière exponentiel, et les paramètres de population suivent une loi log-normal. Pour le modèle d'erreur résiduelle, il s'agit d'un modèle mixte de type "additif et proportionnel".
 
-La clairance et le volume de distribution ont été retenu comme paramètres finaux du modèle. Pour les covariables, ce sont l'age et le poids suivant un modèle allométrique sur respectivement la Clairance et le Volume de distribution.
+La clairance et le volume de distribution ont été retenu comme paramètres finaux du modèle. Pour les covariables, ce sont l'age et le poids suivant une relation allométrique sur respectivement la Clairance et le Volume.
 
-Le résumé des valeurs de paramètres sont disponibles dans le tableau 1. Pour les covariables, les valeurs sont disponibles dans le tableau 2.
+Le résumé des valeurs de paramètres sont disponibles dans le tableau 1, et pour les covariables, les valeurs sont disponibles dans le tableau 2 ci dessous.
 
-```{r Creation table parametres, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Tableau 1 - Valeur des paramètres, echo=FALSE, message=FALSE, warning=FALSE}
 noms_parametres = c("valeur typique - V", "omega - V","valeur typique - Cl", "omega - Cl")
 valeurs_parametres = c(2.33,0.244,1.15,0.349)
 rse = c(5, 18, 7, 14)
@@ -54,7 +54,7 @@ ft_parametres = flextable(df_parametres)
 ft_parametres
 ```
 
-```{r Creation table des covariables, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Tableau 2 - Valeur des covariables, echo=FALSE, message=FALSE, warning=FALSE}
 noms_parametres = c("Age", "Poids")
 valeurs_parametres = c(20.7,7.1)
 sd = c(16, 2.4)
@@ -72,15 +72,17 @@ La première étape fut l'écriture du modèle Simulix. Ce dernier est disponibl
 
 -   CL = 1.15 L/h
 
-Ensuite, il s'en est suivi la définition des covariable avec leur distribution et valeurs moyennes :
+Il s'en est suivi la définition des covariables avec leur distribution et valeurs moyennes :
 
--   Age : normal, 20.7 mois +/- 16
+-   Age : log-normal, valeur moyenne = 20.7 mois et d'écart type = 16
 
--   Poids : normal, 7.1 kg +/- 2.4
+-   Poids : log-normal, valeur moyenne = 7.1 kg et d'écart type = 2.4
 
-Pour le premier traitement, il fut repris la dose retenue par l'article à savoir 10 mg/kg et par jour, avec une durée de perfusion de 30min. La dose croit selon le poids, et l'intercept est de 0. Au départ un modèle sur 7 jour a été réalisé, mais pour plus de simplicité sur le rapport (et comme il n'est pas fait mention de durée totale sur l'article), on se basera en dose unique.
+Pour le premier traitement, il fut repris la dose retenue par l'article à savoir 10 mg/kg et par jour, avec une durée de perfusion de 30min. La dose croit selon le poids, et l'intercepte demandé sur Simulix est de 0. Au départ un modèle sur 7 jour a été réalisé, mais pour plus de simplicité sur le rapport (et comme il n'est pas fait mention de durée totale de traitement dans l'article), on se basera sur une dose unique.
 
 Le model, dénommé "10mgkg_uniqueDose_withCov.slmx" est disponible dans "models/Simulix Project/".
+
+La comparaison se faite avec un traitement unique pour tous à 150 mg, avec donc absence de scaling selon le poids. Toujours en dose unique, et avec un délai de perfusion de 30min.
 
 # Résultats
 
@@ -98,7 +100,7 @@ parametres_ind = parametres_ind %>% dplyr::group_by(group)
 
 ## Description de la population virtuelle générée
 
-Les principales caractéristiques de la population sont rapportées dans la table X
+Les principales caractéristiques de la population sont rapportées dans la table 3 ci dessous. L'ensemble de la population simulée est de 1000 patients pour chacun des groupes, conformément à l'article.
 
 ```{r tables et graphs paramètres covariables, echo=FALSE}
 # on peut utiliser différents packages
@@ -114,7 +116,7 @@ La figure X décrit la valeur moyenne pour chacune des distributions de paramèt
 ggbetweenstats(data=parametres_ind, x=group, y=age)
 ```
 
-## Evaluation des stratégies thérapeutiques
+## Évaluation des stratégies thérapeutiques
 
 ```{r chargement concentrations}
 concentrations_ind = read.csv("Simulation/simulation_Cc.txt")
@@ -140,7 +142,7 @@ conc_J5 = concentrations_ind %>% filter(time>76)
 target = conc_J5 %>% summarise(conc_max=max(Cc), conc_min = min(Cc))
 ```
 
-Les distributions des valeurs de Cmax et Cmin selon les groupes sont présentées dans les figures XX et XX respectivement.
+Les distributions des valeurs de Cmax et Cmin selon les groupes sont présentées dans les figures 2 et 3 respectivement.
 
 ```{r}
 # figure décrivant la Cmax selon les groupes
