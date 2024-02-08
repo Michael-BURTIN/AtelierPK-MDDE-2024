@@ -135,16 +135,20 @@ concentrations_ind = concentrations_ind %>% dplyr::group_by(group, ID)
 La cible d'efficacité considérée est l'atteinte d'une concentration maximale supérieure ou égale à 8 mg/l (cible basse), 16 mg/l (cible intermédiaire) et 32 mg/l (cible haute). Seule la Cmax du 5ème jour a été considérée pour cette analyse.
 
 ```{r calcul Cmax et Cmin, include=FALSE}
-
 conc_J5 = concentrations_ind %>% filter(TIME>0)
 target = conc_J5 %>% summarise(conc_max=max(Cc), conc_min = min(Cc))
+
+# Forcer le passage toutes les valeurs de type char en double (et donc NaN)
+target$conc_max <- as.double(target$conc_max)
+target$conc_min <- as.double(target$conc_min)
 ```
 
-Pour le moment, les données simulées comportants des valeurs manquates, il n'est pas possible de poursuivre l'execution du code sans erreur. Le reste du rapport décrira ce qui est attendu.
+Pour le moment, les données simulées comportant des valeurs manquantes, il n'est pas possible de poursuivre l’exécution du code sans erreur. Le reste du rapport décrira ce qui est attendu.
 
 ```{r}
 # figure décrivant la Cmax selon les groupes
 ggbetweenstats(data=target, x=group, y=conc_max)
+
 ```
 
 ```{r}
