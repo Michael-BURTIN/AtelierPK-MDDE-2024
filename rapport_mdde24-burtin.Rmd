@@ -113,11 +113,11 @@ tab_3 <- set_caption(tab_3, as_paragraph("Tableau 3 - Valeur des paramètres sim
 tab_3
 ```
 
-La figure X décrit la valeur moyenne pour chacune des distributions de paramètres simulés. Comme nous le voyons, quelque soit le paramètre, les données sont assez similaires entre les deux les groupes.
+La figure 1 décrit l'age moyen pour chacun des groupes de schémas posologiques simulés. Comme nous le voyons, quelque soit le paramètre, les données sont assez similaires entre les deux les groupes. On est proche des 21 mois.
 
 ```{r}
 fig_1 <- ggbetweenstats(data=parametres_ind, x=group, y=age)
-fig_1 + ggtitle("Figure 1 - ")
+fig_1 + ggtitle("Figure 1 - Distribution de l'age au sein de nos deux populations simulées")
 ```
 
 ## Évaluation des stratégies thérapeutiques
@@ -138,7 +138,11 @@ concentrations_ind = concentrations_ind %>% dplyr::group_by(group, ID)
 
 ### Atteinte de la cible d'efficacité
 
-La cible d'efficacité considérée est l'atteinte d'une concentration maximale supérieure ou égale à 8 mg/l (cible basse), 16 mg/l (cible intermédiaire) et 32 mg/l (cible haute). Seule la Cmax du 5ème jour a été considérée pour cette analyse.
+La cible d'efficacité considérée est l'atteinte d'une concentration maximale supérieure ou égale à 8 mg/l (cible basse), 16 mg/l (cible intermédiaire) et 32 mg/l (cible haute).
+
+Sur la figure 2, nous pouvons observer la distribution des concentrations maximales atteintes pour chacun des groupes. Dans le cadre du schéma posologique à 10 mg/kg, on a une moyenne de concentration maximale de 7.12 mg/l. Et pour le schéma posologique à 150 mg, on a une moyenne de concentration maximale de 8.53 mg/l. On note également la présence de plusieurs valeurs extrêmes qui biaisent la moyenne. Il n'y a probablement pas de si grande différence entre les deux schémas posologiques.
+
+Au niveau des concentrations minimales, la figure 3 montre que les distributions sont très similaires. La moyenne des concentrations minimales pour le schéma posologique à 10 mg/kg est de 0.15 mg/l, et pour le schéma posologique à 150 mg, la moyenne est de 0.22 mg/l.
 
 ```{r calcul Cmax et Cmin, include=FALSE}
 conc_J5 = concentrations_ind %>% filter(TIME>0)
@@ -152,13 +156,13 @@ target$conc_min <- as.double(target$conc_min)
 ```{r}
 # figure décrivant la Cmax selon les groupes
 fig_2 <- ggbetweenstats(data=target, x=group, y=conc_max)
-fig_2 + ggtitle("Figure 2 - ")
+fig_2 + ggtitle("Figure 2 - Distribution des concentrations maximales atteintes pour nos deux schémas pologiques")
 ```
 
 ```{r}
 # figure décrivant la Cmin selon les groupes
 fig_3 <- ggbetweenstats(data=target, x=group, y=conc_min)
-fig_3 + ggtitle("Figure 3 - ")
+fig_3 + ggtitle("Figure 3 - Distribution des concentraiton minimales atteintes pour nos deux schémas pologiques")
 ```
 
 ## Calcul de l'atteinte de la cible
