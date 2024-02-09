@@ -30,12 +30,12 @@ TREATMENT:
 '10mgkg_5day_treatment' = {{{start=0, interval=24, nbDoses=5, amount=10, duration=0.5}}, adm=1, scale={duration, covariate=weight, intercept=0}}
 '10mgkg_uniqueDose' = {{{times={0}, amounts={10}, durations={0.5}}}, adm=1, scale={duration, covariate=weight, intercept=0}}
 '150mg_uniqueDose_withoutWeightScaling' = {{{times={0}, amounts={150}, durations={0.5}}}, adm=1}
-'20mgkg_per_8h_5day' = {{{start=0, interval=8, nbDoses=15, amount=15, duration=0.5}}, adm=1, scale={duration, covariate=weight, intercept=0}}
+'15mgkg_every_8h_5day' = {{{start=0, interval=8, nbDoses=15, amount=15, duration=0.5}}, adm=1, scale={duration, covariate=weight, intercept=0}}
 
 [SIMULATION]
 GROUPS:
-'20mgkg_every_8h'={size=1000, parameter='PopParameters', remaining={}, covariate='laresModel_Covariate', outputs={'7day_Output_Cc'}, treatment={'20mgkg_per_8h_5day'}}
-'10mgkg_per_day'={size=1000, parameter='PopParameters', remaining={}, covariate='laresModel_Covariate', outputs={'7day_Output_Cc'}, treatment={'10mgkg_5day_treatment'}}
+'simulationGroup1'={size=1000, parameter='PopParameters', remaining={}, covariate='laresModel_Covariate', outputs={'7day_Output_Cc'}, treatment={'15mgkg_every_8h_5day'}}
+'simulationGroup2'={size=1000, parameter='PopParameters', remaining={}, covariate='laresModel_Covariate', outputs={'7day_Output_Cc'}, treatment={'10mgkg_5day_treatment'}}
 
 [EXPLORATION]
 GROUPS:
