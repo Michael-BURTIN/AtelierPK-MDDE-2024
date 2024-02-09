@@ -51,6 +51,7 @@ rse = c(5, 18, 7, 14)
 unites_parametres = c("L","L","L/h","L/h")
 df_parametres = data.frame("Parametres"=noms_parametres, "Valeur"=valeurs_parametres, "RSE"=rse,"Unités"=unites_parametres)
 ft_parametres = flextable(df_parametres)
+ft_parametres <- set_caption(ft_parametres, as_paragraph("Tableau 1 - Valeur des paramètres structurels"))
 ft_parametres
 ```
 
@@ -61,6 +62,7 @@ sd = c(16, 2.4)
 unites_parametres = c("mois","kg")
 df_parametres = data.frame("Parametres"=noms_parametres, "Valeur"=valeurs_parametres, "Sd"=sd,"Unités"=unites_parametres)
 ft_parametres = flextable(df_parametres)
+ft_parametres <- set_caption(ft_parametres, as_paragraph("Tableau 2 - Valeur des covariables"))
 ft_parametres
 ```
 
@@ -102,16 +104,20 @@ Les principales caractéristiques de la population sont rapportées dans la tabl
 
 ```{r tables et graphs paramètres covariables, echo=FALSE}
 # on peut utiliser différents packages
-parametres_ind %>% select(-id) %>%
+tab_3 <- parametres_ind %>% select(-id) %>%
 	dlookr::describe() %>% 
 	dplyr::select(c(described_variables, group, mean, sd)) %>%
+  mutate(across(where(is.numeric), ~round(., 3))) %>%
 	flextable
+tab_3 <- set_caption(tab_3, as_paragraph("Tableau 3 - Valeur des paramètres simulés pour nos deux traitements"))
+tab_3
 ```
 
 La figure X décrit la valeur moyenne pour chacune des distributions de paramètres simulés. Comme nous le voyons, quelque soit le paramètre, les données sont assez similaires entre les deux les groupes.
 
 ```{r}
-ggbetweenstats(data=parametres_ind, x=group, y=age)
+fig_1 <- ggbetweenstats(data=parametres_ind, x=group, y=age)
+fig_1 + ggtitle("Figure 1 - ")
 ```
 
 ## Évaluation des stratégies thérapeutiques
@@ -143,17 +149,16 @@ target$conc_max <- as.double(target$conc_max)
 target$conc_min <- as.double(target$conc_min)
 ```
 
-Pour le moment, les données simulées comportant des valeurs manquantes, il n'est pas possible de poursuivre l’exécution du code sans erreur. Le reste du rapport décrira ce qui est attendu.
-
 ```{r}
 # figure décrivant la Cmax selon les groupes
-ggbetweenstats(data=target, x=group, y=conc_max)
-
+fig_2 <- ggbetweenstats(data=target, x=group, y=conc_max)
+fig_2 + ggtitle("Figure 2 - ")
 ```
 
 ```{r}
 # figure décrivant la Cmin selon les groupes
-ggbetweenstats(data=target, x=group, y=conc_min)
+fig_3 <- ggbetweenstats(data=target, x=group, y=conc_min)
+fig_3 + ggtitle("Figure 3 - ")
 ```
 
 ## Calcul de l'atteinte de la cible
@@ -162,19 +167,19 @@ Pourcentage de patients atteignant la cible selon le schéma posologique
 
 ```{r Analyse de l'atteinte de la cible}
 cible_basse = target %>% filter(conc_max>8 & conc_min<0.5)
-cible_basse_100mg = cible_basse %>% filter(group=="100mg") %>%
+cible_basse_150mg = cible_basse %>% filter(group=="150mg") %>%
 	nrow()
 cible_basse_10mgkg = cible_basse %>% filter(group=="10mgkg") %>%
 	nrow()
 
 cible_moyenne = target %>% filter(conc_max>16 & conc_min<0.5)
-cible_moyenne_100mg = cible_moyenne %>% filter(group=="100mg") %>%
+cible_moyenne_150mg = cible_moyenne %>% filter(group=="150mg") %>%
 	nrow()
 cible_moyenne_10mgkg = cible_moyenne %>% filter(group=="10mgkg") %>%
 	nrow()
 
 cible_haute = target %>% filter(conc_max>32 & conc_min<0.5)
-cible_haute_100mg = cible_haute %>% filter(group=="100mg") %>%
+cible_haute_150mg = cible_haute %>% filter(group=="150mg") %>%
 	nrow()
 cible_haute_10mgkg = cible_haute %>% filter(group=="10mgkg") %>%
 	nrow()
@@ -186,7 +191,7 @@ atteinte_cible_basse = c(cible_basse_100mg, cible_basse_10mgkg)
 atteinte_cible_moyenne = c(cible_moyenne_100mg, cible_moyenne_10mgkg)
 atteinte_cible_haute = c(cible_haute_100mg, cible_haute_10mgkg)
 
-traitements = c("100 mg, dose unique", "10 mg/kg par jour")
+traitements = c("150 mg, dose unique", "10 mg/kg par jour")
 
 resultats_cible = data.frame(traitements, atteinte_cible_basse, atteinte_cible_moyenne, atteinte_cible_haute) %>%
 	rename("Traitement" = traitements,
@@ -194,7 +199,7 @@ resultats_cible = data.frame(traitements, atteinte_cible_basse, atteinte_cible_m
 			 "Pourcentage d'atteinte de la cible moyenne" = atteinte_cible_moyenne,
 			 "Pourcentage d'atteinte de la cible haute" = atteinte_cible_haute,) %>%
 	flextable
-
+resultats_cible <- set_caption(resultats_cible, as_paragraph("Tableau 4 - Pourcentage d'atteninte de la cible"))
 resultats_cible
 
 ```
