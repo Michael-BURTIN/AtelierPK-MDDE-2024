@@ -167,7 +167,7 @@ fig_3 + ggtitle("Figure 3 - Distribution des concentraiton minimales atteintes p
 
 Egalement voici la distribution au cours du temps des concentrations pour chacun des groupes à partir de Simulix. On peut observer que dès 5 heures dans chacun des groupes, la concentration redescend en dessous de 10 mg/l. Augmenter le dosage ne fera qu'augmenter le pic de concentration sur les premières heures et donc la toxicité. Il vaut mieux partir sur une administration plus régulière, mais inférieur à 150 mg où on atteint déjà un pic bien supérieur à la moyenne haute.
 
-![Figure 4 - Evoluion des concentrations au cours du temps pour chacun des schémas posologiques](models/Simulix%20Project/150mg_uniqueDose/ChartsFigures/Distribution%20de%20la%20Cmax%20sur%20les%20deux%20schémas%20posologique.png)
+![Figure 4 - Evolution des concentrations au cours du temps pour chacun des schémas posologiques](models/Simulix%20Project/150mg_uniqueDose/ChartsFigures/Distribution%20de%20la%20Cmax%20sur%20les%20deux%20schémas%20posologique.png)
 
 ## Calcul de l'atteinte de la cible
 
