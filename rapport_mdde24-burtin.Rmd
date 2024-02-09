@@ -165,45 +165,12 @@ fig_3 <- ggbetweenstats(data=target, x=group, y=conc_min)
 fig_3 + ggtitle("Figure 3 - Distribution des concentraiton minimales atteintes pour nos deux schémas pologiques")
 ```
 
+Egalement voici la distribution au cours du temps des concentrations pour chacun des groupes à partir de Simulix. On peut observer que dès 5 heures dans chacun des groupes, la concentration redescend en dessous de 10 mg/l. Augmenter le dosage ne fera qu'augmenter le pic de concentration sur les premières heures et donc la toxicité. Il vaut mieux partir sur une administration plus régulière, mais inférieur à 150 mg où on atteinte déjà un pic bien supérieure à la moyenne haute.
+
+![Figure 4 - Evoluion des concentrations au cours du temps pour chacun des schémas posologiques](models/Simulix Project/150mg_uniqueDose/ChartsFigures/Distribution de la Cmax sur les deux schémas posologique.png)
+
 ## Calcul de l'atteinte de la cible
 
-Pourcentage de patients atteignant la cible selon le schéma posologique
+Plusieurs essais de dosage, on ensuite été réalisé en variant la dose et la fréquence. L'objectif étant de ne pas trop sortir de la limite haute pour les outsiders afin d'éviter toutes surtoxicité. Mais également de garder la concentration moyenne sur une cible intermédiaire (à 16 mg/l), et bien entendu le plus rapprocher possible afin d'assurer un maximum d'efficacité sur l'infection. Ainsi, un dosage à 15 mg/kg toutes les 8 heures fût ce qui concilier au mieux tous ces aspects. La figure 5 ci dessous compare le traitement à 10 mg/kg par jour issu de l'article, et ma recommandation à 15 mg/kg toutes les 8 heures.
 
-```{r Analyse de l'atteinte de la cible}
-cible_basse = target %>% filter(conc_max>8 & conc_min<0.5)
-cible_basse_150mg = cible_basse %>% filter(group=="150mg") %>%
-	nrow()
-cible_basse_10mgkg = cible_basse %>% filter(group=="10mgkg") %>%
-	nrow()
-
-cible_moyenne = target %>% filter(conc_max>16 & conc_min<0.5)
-cible_moyenne_150mg = cible_moyenne %>% filter(group=="150mg") %>%
-	nrow()
-cible_moyenne_10mgkg = cible_moyenne %>% filter(group=="10mgkg") %>%
-	nrow()
-
-cible_haute = target %>% filter(conc_max>32 & conc_min<0.5)
-cible_haute_150mg = cible_haute %>% filter(group=="150mg") %>%
-	nrow()
-cible_haute_10mgkg = cible_haute %>% filter(group=="10mgkg") %>%
-	nrow()
-```
-
-```{r Table des résultats}
-
-atteinte_cible_basse = c(cible_basse_100mg, cible_basse_10mgkg)
-atteinte_cible_moyenne = c(cible_moyenne_100mg, cible_moyenne_10mgkg)
-atteinte_cible_haute = c(cible_haute_100mg, cible_haute_10mgkg)
-
-traitements = c("150 mg, dose unique", "10 mg/kg par jour")
-
-resultats_cible = data.frame(traitements, atteinte_cible_basse, atteinte_cible_moyenne, atteinte_cible_haute) %>%
-	rename("Traitement" = traitements,
-			 "Pourcentage d'atteinte de la cible basse" = atteinte_cible_basse,
-			 "Pourcentage d'atteinte de la cible moyenne" = atteinte_cible_moyenne,
-			 "Pourcentage d'atteinte de la cible haute" = atteinte_cible_haute,) %>%
-	flextable
-resultats_cible <- set_caption(resultats_cible, as_paragraph("Tableau 4 - Pourcentage d'atteninte de la cible"))
-resultats_cible
-
-```
+![Distribution au cours du temps de chacun des groupes de schéma posologique](models/Simulix Project/15mgk__8h_on_5days/ChartsFigures/predictiondistribution_Cc_0_0.png)
